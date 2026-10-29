@@ -1,3 +1,9 @@
+/*
+ * Nome: Santiago Gabriel Reyes
+ * Data: 28/10/26
+ * Arquivo: estruturas.h
+ * Descricao: Define as estruturas de dados das contas e movimentacoes bancarias.
+ */
 typedef struct Conta {
     int codigo_conta;
     char banco[50];

@@ -1,11 +1,20 @@
-#include <stdio.h>
+/*
+ * Nome: Santiago Gabriel Reyes
+ * Data: 28/10/26
+ * Arquivo: main.c
+ * Descricao: Contem a funcao principal e o menu de opcoes do sistema.
+ */
+ #include <stdio.h>
 #include "../include/estruturas.h"
 
 int main() {
+
+    
     Conta *inicio_contas = NULL;
     int opcao;
 
     do {
+
         printf("\n====================================\n");
         printf("    SISTEMA DE CONTROLE BANCARIO\n");
         printf("====================================\n");
@@ -22,31 +31,42 @@ int main() {
         }
 
         switch (opcao) {
+
             case 1:
+
                 cadastrar_inicio(&inicio_contas);
                 break;
 
             case 2:
+
                 cadastrar_final(&inicio_contas);
                 break;
 
             case 3:
+
                 cadastrar_posicao(&inicio_contas);
                 break;
 
             case 4:
+
                 listar_contas(inicio_contas);
                 break;
 
             case 0:
+
                 printf("Encerrando o programa...\n");
                 break;
 
             default:
+
                 printf("Opcao invalida!\n");
+
         }
 
     } while (opcao != 0);
 
+
     return 0;
 }
+
+

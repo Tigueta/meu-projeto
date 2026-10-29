@@ -1,4 +1,9 @@
-
+/*
+ * Nome: Santiago Gabriel Reyes
+ * Data: 28/10/26
+ * Arquivo: contas.c
+ * Descricao: Implementa as operacoes de cadastro e listagem de contas bancarias.
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
