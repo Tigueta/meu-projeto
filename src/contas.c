@@ -1,157 +1,236 @@
 /*
  * Nome: Santiago Gabriel Reyes
- * Data: 28/10/26
+ * Data: 30/10/26
  * Arquivo: contas.c
- * Descricao: Implementa as operacoes de cadastro e listagem de contas bancarias.
+ * Descricao: Contem as funcoes de cadastro e consulta de contas bancarias.
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "../include/estruturas.h"
 
-int codigo_existe(Conta *inicio, int codigo) {
-    Conta *aux = inicio;
+void gotoxy(int x, int y);
+void cabecalho(char titulo[]);
 
-    while (aux != NULL) {
-        if (aux->codigo_conta == codigo) {
+
+int codigo_existe(Conta *inicio, int codigo) {
+
+    while (inicio != NULL) {
+
+        if (inicio->codigo_conta == codigo) {
+
             return 1;
         }
 
-        aux = aux->prox;
+        inicio = inicio->prox;
     }
 
     return 0;
 }
 
-void cadastrar_dados(Conta *nova) {
 
-    printf("\nCodigo da conta: ");
-    scanf("%d", &nova->codigo_conta);
+int cadastrar_dados(Conta *nova, Conta *inicio) {
 
+    char entrada[100];
+
+    system("cls");
+    cabecalho("CADASTRO DE CONTA BANCARIA");
+    gotoxy(5, 10);
+    printf("Codigo da conta: ");
+    fgets(entrada, sizeof(entrada), stdin);
+
+
+    if (sscanf(entrada, "%d", &nova->codigo_conta) != 1 || nova->codigo_conta <= 0) {
+        return 0;
+    }
+
+    if (codigo_existe(inicio, nova->codigo_conta)) {
+        gotoxy(5, 25);
+        printf("Esse codigo ja esta cadastrado!");
+        return 0;
+    }
+
+    gotoxy(5, 12);
     printf("Banco: ");
-    scanf(" %49[^\n]", nova->banco);
 
+    fgets(nova->banco, sizeof(nova->banco), stdin);
+    nova->banco[strcspn(nova->banco, "\n")] = '\0';
+
+    gotoxy(5, 14);
     printf("Agencia: ");
-    scanf(" %9[^\n]", nova->agencia);
 
+    fgets(nova->agencia, sizeof(nova->agencia), stdin);
+    nova->agencia[strcspn(nova->agencia, "\n")] = '\0';
+
+    gotoxy(5, 16);
     printf("Numero da conta: ");
-    scanf(" %19[^\n]", nova->numero_conta);
 
-    printf("Tipo da conta (corrente/poupanca): ");
-    scanf(" %19[^\n]", nova->tipo_conta);
+    fgets(nova->numero_conta, sizeof(nova->numero_conta), stdin);
+    nova->numero_conta[strcspn(nova->numero_conta, "\n")] = '\0';
 
+    gotoxy(5, 18);
+    printf("Tipo de conta: ");
+
+    fgets(nova->tipo_conta, sizeof(nova->tipo_conta), stdin);
+    nova->tipo_conta[strcspn(nova->tipo_conta, "\n")] = '\0';
+
+    gotoxy(5, 20);
     printf("Saldo inicial: ");
-    scanf("%lf", &nova->vl_saldo);
 
-    printf("Limite de credito: ");
-    scanf("%lf", &nova->vl_limite);
+    fgets(entrada, sizeof(entrada), stdin);
+
+    if (sscanf(entrada, "%lf", &nova->vl_saldo) != 1 || nova->vl_saldo < 0) {
+        return 0;
+    }
+
+    gotoxy(5, 22);
+    printf("Limite da conta: ");
+    fgets(entrada, sizeof(entrada), stdin);
+
+    if (sscanf(entrada, "%lf", &nova->vl_limite) != 1 || nova->vl_limite < 0) {
+        return 0;
+    }
 
     strcpy(nova->status, "ativo");
 
     nova->ant = NULL;
     nova->prox = NULL;
+
+    return 1;
 }
 
+
+
 void cadastrar_inicio(Conta **inicio) {
-    Conta *nova = malloc(sizeof(Conta));
+
+    Conta *nova = (Conta *) malloc(sizeof(Conta));
 
     if (nova == NULL) {
-        printf("Erro ao reservar memoria!\n");
+
         return;
     }
 
-    printf("\n--- Cadastro de conta ---\n");
-    cadastrar_dados(nova);
+    if (!cadastrar_dados(nova, *inicio)) {
 
-    if (codigo_existe(*inicio, nova->codigo_conta)) {
         free(nova);
-        printf("Codigo ja cadastrado!\n");
         return;
     }
 
     nova->prox = *inicio;
 
     if (*inicio != NULL) {
+
         (*inicio)->ant = nova;
     }
 
     *inicio = nova;
 
-    printf("Conta cadastrada no inicio!\n");
+    gotoxy(5, 25);
+    printf("Conta cadastrada com sucesso!");
+
 }
 
+
+
 void cadastrar_final(Conta **inicio) {
-    Conta *nova = malloc(sizeof(Conta));
-    Conta *aux = *inicio;
+
+    Conta *nova = (Conta *) malloc(sizeof(Conta));
+    Conta *aux;
 
     if (nova == NULL) {
-        printf("Erro ao reservar memoria!\n");
+
         return;
     }
 
-    printf("\n--- Cadastro de conta ---\n");
-    cadastrar_dados(nova);
+    if (!cadastrar_dados(nova, *inicio)) {
 
-    if (codigo_existe(*inicio, nova->codigo_conta)) {
         free(nova);
-        printf("Codigo ja cadastrado!\n");
         return;
     }
 
     if (*inicio == NULL) {
+
         *inicio = nova;
-    } else {
+    }
+
+    else {
+
+        aux = *inicio;
+
         while (aux->prox != NULL) {
+
             aux = aux->prox;
         }
 
         aux->prox = nova;
         nova->ant = aux;
+
     }
 
-    printf("Conta cadastrada no final!\n");
+    gotoxy(5, 25);
+    printf("Conta cadastrada com sucesso!");
+
 }
 
+
+
 void cadastrar_posicao(Conta **inicio) {
+
     Conta *nova;
-    Conta *aux = *inicio;
-    int pos, i;
+    Conta *aux;
+    int posicao;
+    int contador = 1;
 
-    printf("Posicao para inserir: ");
-    scanf("%d", &pos);
+    system("cls");
+    cabecalho("CADASTRO DE CONTA POR POSICAO");
+    gotoxy(5, 10);
+    printf("Informe a posicao desejada: ");
+    scanf("%d", &posicao);
+    getchar();
 
-    if (pos < 1) {
-        printf("Posicao invalida!\n");
+    if (posicao < 1) {
+
+        gotoxy(5, 25);
+        printf("Posicao invalida!");
+
         return;
     }
 
-    if (pos == 1) {
+    if (posicao == 1) {
+
         cadastrar_inicio(inicio);
+
         return;
     }
 
-    for (i = 1; aux != NULL && i < pos - 1; i++) {
+    aux = *inicio;
+
+    while (aux != NULL && contador < posicao - 1) {
+
         aux = aux->prox;
+        contador++;
+
     }
 
     if (aux == NULL) {
-        printf("Posicao invalida!\n");
+
+        gotoxy(5, 25);
+        printf("Posicao inexistente!");
         return;
+
     }
 
-    nova = malloc(sizeof(Conta));
+    nova = (Conta *) malloc(sizeof(Conta));
 
     if (nova == NULL) {
-        printf("Erro ao reservar memoria!\n");
+
         return;
     }
 
-    printf("\n--- Cadastro de conta ---\n");
-    cadastrar_dados(nova);
+    if (!cadastrar_dados(nova, *inicio)) {
 
-    if (codigo_existe(*inicio, nova->codigo_conta)) {
         free(nova);
-        printf("Codigo ja cadastrado!\n");
         return;
     }
 
@@ -159,35 +238,73 @@ void cadastrar_posicao(Conta **inicio) {
     nova->ant = aux;
 
     if (aux->prox != NULL) {
+
         aux->prox->ant = nova;
     }
 
     aux->prox = nova;
 
-    printf("Conta cadastrada na posicao %d!\n", pos);
+    gotoxy(5, 25);
+    printf("Conta cadastrada com sucesso!");
+    
 }
 
-void listar_contas(Conta *inicio) {
-    Conta *aux = inicio;
 
-    if (aux == NULL) {
-        printf("\nNenhuma conta cadastrada.\n");
+
+void listar_contas(Conta *inicio) {
+
+    int linha = 10;
+
+    system("cls");
+    cabecalho("CONSULTA DE CONTAS BANCARIAS");
+
+    if (inicio == NULL) {
+
+        gotoxy(5, 15);
+        printf("Nenhuma conta cadastrada.");
+
         return;
     }
 
-    while (aux != NULL) {
-        printf("\n------------------------------\n");
-        printf("Codigo: %d\n", aux->codigo_conta);
-        printf("Banco: %s\n", aux->banco);
-        printf("Agencia: %s\n", aux->agencia);
-        printf("Numero: %s\n", aux->numero_conta);
-        printf("Tipo: %s\n", aux->tipo_conta);
-        printf("Saldo: R$ %.2f\n", aux->vl_saldo);
-        printf("Limite: R$ %.2f\n", aux->vl_limite);
-        printf("Status: %s\n", aux->status);
+    while (inicio != NULL) {
 
-        aux = aux->prox;
+        gotoxy(5, linha);
+        printf("Codigo: %d", inicio->codigo_conta);
+        gotoxy(35, linha);
+        printf("Banco: %s", inicio->banco);
+        gotoxy(5, linha + 1);
+        printf("Agencia: %s", inicio->agencia);
+        gotoxy(35, linha + 1);
+        printf("Conta: %s", inicio->numero_conta);
+        gotoxy(5, linha + 2);
+        printf("Tipo: %s", inicio->tipo_conta);
+        gotoxy(35, linha + 2);
+        printf("Saldo: R$ %.2f", inicio->vl_saldo);
+        gotoxy(5, linha + 3);
+        printf("Limite: R$ %.2f", inicio->vl_limite);
+        gotoxy(35, linha + 3);
+        printf("Status: %s", inicio->status);
+
+        linha += 5;
+        inicio = inicio->prox;
+
+        if (linha > 23 && inicio != NULL) {
+
+            gotoxy(5, 26);
+            printf("Existem mais contas. Pressione uma tecla para continuar.");
+            getchar();
+            system("cls");
+            cabecalho("CONSULTA DE CONTAS BANCARIAS");
+            linha = 10;
+
+        }
+
     }
+
 }
+
+
+
+
 
 

@@ -1,0 +1,33 @@
+
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compilar Sistema Bancario",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-Wall",
+                "-Wextra",
+                "-g3",
+                "src/main.c",
+                "src/contas.c",
+                "-o",
+                "src/output/main.exe"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "Executar Sistema Bancario",
+            "type": "shell",
+            "command": ".\\src\\output\\main.exe",
+            "dependsOn": "Compilar Sistema Bancario",
+            "dependsOrder": "sequence",
+            "problemMatcher": []
+        }
+    ]
+}
+
