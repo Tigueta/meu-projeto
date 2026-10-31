@@ -312,3 +312,70 @@ void listar_contas(Conta *inicio)
         }
     }
 }
+
+void alterar_conta(Conta *inicio)
+{
+
+    Conta *aux = inicio;
+    int codigo;
+
+    system("cls");
+    cabecalho("ALTERACAO DE CONTA BANCARIA");
+
+    gotoxy(5, 10);
+    printf("Informe o codigo da conta: ");
+    scanf("%d", &codigo);
+    getchar();
+
+    while (aux != NULL && aux->codigo_conta != codigo)
+    {
+        aux = aux->prox;
+    }
+
+    if (aux == NULL)
+    {
+        gotoxy(5, 25);
+        printf("Conta nao encontrada!");
+        return;
+    }
+
+    gotoxy(5, 12);
+    printf("Novo banco: ");
+    fgets(aux->banco, sizeof(aux->banco), stdin);
+    aux->banco[strcspn(aux->banco, "\n")] = '\0';
+
+    gotoxy(5, 14);
+    printf("Nova agencia: ");
+    fgets(aux->agencia, sizeof(aux->agencia), stdin);
+    aux->agencia[strcspn(aux->agencia, "\n")] = '\0';
+
+    gotoxy(5, 16);
+    printf("Novo numero da conta: ");
+    fgets(aux->numero_conta, sizeof(aux->numero_conta), stdin);
+    aux->numero_conta[strcspn(aux->numero_conta, "\n")] = '\0';
+
+    gotoxy(5, 18);
+    printf("Novo tipo de conta: ");
+    fgets(aux->tipo_conta, sizeof(aux->tipo_conta), stdin);
+    aux->tipo_conta[strcspn(aux->tipo_conta, "\n")] = '\0';
+
+    gotoxy(5, 25);
+    printf("Dados alterados com sucesso!");
+}
+
+int conta_tem_movimentacao(Movimentacao *movimentos, int codigo)
+{
+
+    while (movimentos != NULL)
+    {
+
+        if (movimentos->codigo_conta == codigo)
+        {
+            return 1;
+        }
+
+        movimentos = movimentos->prox;
+    }
+
+    return 0;
+}
