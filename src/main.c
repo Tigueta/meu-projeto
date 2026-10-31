@@ -144,6 +144,12 @@ void menu_contas(Conta **inicio, Movimentacao *movimentos)
             pausar();
             break;
 
+        case '7':
+
+            alterar_conta(*inicio);
+            pausar();
+            break;
+
         case '8':
 
             listar_contas(*inicio);
@@ -157,9 +163,6 @@ void menu_contas(Conta **inicio, Movimentacao *movimentos)
         case '4':
         case '5':
         case '6':
-
-        case '7':
-
             cabecalho("FUNCIONALIDADE EM DESENVOLVIMENTO");
             gotoxy(20, 15);
             printf("Esta opcao sera implementada posteriormente.");

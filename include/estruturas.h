@@ -43,3 +43,9 @@ void cadastrar_inicio(Conta **inicio);
 void cadastrar_final(Conta **inicio);
 void cadastrar_posicao(Conta **inicio);
 void listar_contas(Conta *inicio);
+
+int conta_tem_movimentacao(Movimentacao *movimentos, int codigo);
+void alterar_conta(Conta *inicio);
+void remover_inicio(Conta **inicio, Movimentacao *movimentos);
+void remover_final(Conta **inicio, Movimentacao *movimentos);
+void remover_posicao(Conta **inicio, Movimentacao *movimentos);
