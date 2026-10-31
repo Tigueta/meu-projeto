@@ -10,7 +10,8 @@
 #include <conio.h>
 #include "../include/estruturas.h"
 
-void gotoxy(int x, int y) {
+void gotoxy(int x, int y)
+{
 
     COORD posicao;
     posicao.X = x;
@@ -19,29 +20,29 @@ void gotoxy(int x, int y) {
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), posicao);
 }
 
-
-void desenhar_tela() {
+void desenhar_tela()
+{
 
     int i;
 
     system("cls");
 
-    for (i = 1; i <= 98; i++) {
+    for (i = 1; i <= 98; i++)
+    {
 
         gotoxy(i, 1);
         printf("-");
         gotoxy(i, 29);
         printf("-");
-
     }
 
-    for (i = 1; i <= 29; i++) {
+    for (i = 1; i <= 29; i++)
+    {
 
         gotoxy(1, i);
         printf("|");
         gotoxy(98, i);
         printf("|");
-
     }
 
     gotoxy(1, 1);
@@ -52,17 +53,15 @@ void desenhar_tela() {
     printf("+");
     gotoxy(98, 29);
     printf("+");
-
 }
 
-
-void cabecalho(char titulo[]) {
+void cabecalho(char titulo[])
+{
 
     desenhar_tela();
 
     gotoxy(33, 3);
     printf("SISTEMA DE CONTROLE BANCARIO");
-
 
     gotoxy(2, 5);
     printf("================================================================================================");
@@ -71,31 +70,35 @@ void cabecalho(char titulo[]) {
     printf("%s", titulo);
 }
 
+char ler_opcao()
+{
 
-char ler_opcao() {
-
+    char opcao;
 
     gotoxy(5, 26);
     printf("Escolha uma opcao: ");
-    return getch();
 
+    scanf(" %c", &opcao);
+    getchar();
+
+    return opcao;
 }
 
-
-void pausar() {
+void pausar()
+{
 
     gotoxy(5, 28);
     printf("Pressione qualquer tecla para continuar...");
     getch();
-
 }
 
-
-void menu_contas(Conta **inicio) {
+void menu_contas(Conta **inicio, Movimentacao *movimentos)
+{
 
     char opcao;
 
-    do {
+    do
+    {
 
         system("cls");
         cabecalho("MENU DE CONTAS BANCARIAS");
@@ -120,70 +123,67 @@ void menu_contas(Conta **inicio) {
         opcao = ler_opcao();
         system("cls");
 
+        switch (opcao)
+        {
 
-        switch (opcao) {
+        case '1':
 
-            case '1':
+            cadastrar_final(inicio);
+            pausar();
+            break;
 
-                cadastrar_final(inicio);
-                pausar();
-                break;
+        case '2':
 
-            case '2':
+            cadastrar_inicio(inicio);
+            pausar();
+            break;
 
-                cadastrar_inicio(inicio);
-                pausar();
-                break;
+        case '3':
 
-            case '3':
+            cadastrar_posicao(inicio);
+            pausar();
+            break;
 
-                cadastrar_posicao(inicio);
-                pausar();
-                break;
+        case '8':
 
-            case '8':
+            listar_contas(*inicio);
+            pausar();
+            break;
 
-                listar_contas(*inicio);
-                pausar();
-                break;
+        case '9':
 
-            case '9':
+            break;
 
-                break;
+        case '4':
+        case '5':
+        case '6':
 
+        case '7':
 
-            case '4':
-            case '5':
-            case '6':
+            cabecalho("FUNCIONALIDADE EM DESENVOLVIMENTO");
+            gotoxy(20, 15);
+            printf("Esta opcao sera implementada posteriormente.");
+            pausar();
+            break;
 
+        default:
 
-            case '7':
-
-                cabecalho("FUNCIONALIDADE EM DESENVOLVIMENTO");
-                gotoxy(20, 15);
-                printf("Esta opcao sera implementada posteriormente.");
-                pausar();
-                break;
-
-            default:
-
-                cabecalho("OPCAO INVALIDA");
-                gotoxy(35, 15);
-                printf("Tente novamente.");
-                pausar();
+            cabecalho("OPCAO INVALIDA");
+            gotoxy(35, 15);
+            printf("Tente novamente.");
+            pausar();
         }
 
     } while (opcao != '9');
-
 }
 
-
-
-void menu_movimentacao() {
+void menu_movimentacao()
+{
 
     char opcao;
 
-    do {
+    do
+    {
 
         system("cls");
         cabecalho("MENU DE MOVIMENTACAO BANCARIA");
@@ -199,38 +199,41 @@ void menu_movimentacao() {
 
         opcao = ler_opcao();
 
-        if (opcao >= '1' && opcao <= '3') {
+        if (opcao >= '1' && opcao <= '3')
+        {
 
             system("cls");
             cabecalho("FUNCIONALIDADE EM DESENVOLVIMENTO");
             gotoxy(20, 15);
             printf("Esta opcao sera implementada posteriormente.");
             pausar();
-
         }
 
-        else if (opcao != '4') {
+        else if (opcao != '4')
+        {
 
             system("cls");
             cabecalho("OPCAO INVALIDA");
             gotoxy(35, 15);
             printf("Tente novamente.");
             pausar();
-
         }
 
     } while (opcao != '4');
 }
 
-int main() {
+int main()
+{
 
     Conta *inicio_contas = NULL;
+    Movimentacao *inicio_movimentacoes = NULL;
     char opcao;
 
     system("color 0F");
     system("mode con: cols=100 lines=30");
 
-    do {
+    do
+    {
         system("cls");
         cabecalho("MENU PRINCIPAL");
 
@@ -245,40 +248,37 @@ int main() {
 
         opcao = ler_opcao();
 
-        switch (opcao) {
+        switch (opcao)
+        {
 
-            case '1':
-                menu_contas(&inicio_contas);
-                break;
+        case '1':
+            menu_contas(&inicio_contas, inicio_movimentacoes);
+            break;
 
-            case '2':
+        case '2':
 
-                menu_movimentacao();
-                break;
+            menu_movimentacao();
+            break;
 
-            case '3':
+        case '3':
 
-                system("cls");
-                cabecalho("ENCERRANDO O SISTEMA");
-                gotoxy(35, 15);
-                printf("Programa encerrado!");
-                Sleep(1000);
-                break;
+            system("cls");
+            cabecalho("ENCERRANDO O SISTEMA");
+            gotoxy(35, 15);
+            printf("Programa encerrado!");
+            Sleep(1000);
+            break;
 
-            default:
-            
-                system("cls");
-                cabecalho("OPCAO INVALIDA");
-                gotoxy(35, 15);
-                printf("Tente novamente.");
-                pausar();
+        default:
 
+            system("cls");
+            cabecalho("OPCAO INVALIDA");
+            gotoxy(35, 15);
+            printf("Tente novamente.");
+            pausar();
         }
 
     } while (opcao != '3');
 
     return 0;
 }
-
-
-

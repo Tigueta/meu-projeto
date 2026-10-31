@@ -5,9 +5,8 @@
  * Descricao: Contem as estruturas e os prototipos das funcoes do sistema.
  */
 
-
-
-typedef struct Conta {
+typedef struct Conta
+{
 
     int codigo_conta;
     char banco[50];
@@ -23,8 +22,8 @@ typedef struct Conta {
 
 } Conta;
 
-
-typedef struct Movimentacao {
+typedef struct Movimentacao
+{
 
     int sequencial;
     int codigo_conta;
@@ -44,6 +43,3 @@ void cadastrar_inicio(Conta **inicio);
 void cadastrar_final(Conta **inicio);
 void cadastrar_posicao(Conta **inicio);
 void listar_contas(Conta *inicio);
-
-
-

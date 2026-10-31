@@ -13,12 +13,14 @@
 void gotoxy(int x, int y);
 void cabecalho(char titulo[]);
 
+int codigo_existe(Conta *inicio, int codigo)
+{
 
-int codigo_existe(Conta *inicio, int codigo) {
+    while (inicio != NULL)
+    {
 
-    while (inicio != NULL) {
-
-        if (inicio->codigo_conta == codigo) {
+        if (inicio->codigo_conta == codigo)
+        {
 
             return 1;
         }
@@ -29,8 +31,8 @@ int codigo_existe(Conta *inicio, int codigo) {
     return 0;
 }
 
-
-int cadastrar_dados(Conta *nova, Conta *inicio) {
+int cadastrar_dados(Conta *nova, Conta *inicio)
+{
 
     char entrada[100];
 
@@ -40,12 +42,13 @@ int cadastrar_dados(Conta *nova, Conta *inicio) {
     printf("Codigo da conta: ");
     fgets(entrada, sizeof(entrada), stdin);
 
-
-    if (sscanf(entrada, "%d", &nova->codigo_conta) != 1 || nova->codigo_conta <= 0) {
+    if (sscanf(entrada, "%d", &nova->codigo_conta) != 1 || nova->codigo_conta <= 0)
+    {
         return 0;
     }
 
-    if (codigo_existe(inicio, nova->codigo_conta)) {
+    if (codigo_existe(inicio, nova->codigo_conta))
+    {
         gotoxy(5, 25);
         printf("Esse codigo ja esta cadastrado!");
         return 0;
@@ -80,7 +83,8 @@ int cadastrar_dados(Conta *nova, Conta *inicio) {
 
     fgets(entrada, sizeof(entrada), stdin);
 
-    if (sscanf(entrada, "%lf", &nova->vl_saldo) != 1 || nova->vl_saldo < 0) {
+    if (sscanf(entrada, "%lf", &nova->vl_saldo) != 1 || nova->vl_saldo < 0)
+    {
         return 0;
     }
 
@@ -88,7 +92,8 @@ int cadastrar_dados(Conta *nova, Conta *inicio) {
     printf("Limite da conta: ");
     fgets(entrada, sizeof(entrada), stdin);
 
-    if (sscanf(entrada, "%lf", &nova->vl_limite) != 1 || nova->vl_limite < 0) {
+    if (sscanf(entrada, "%lf", &nova->vl_limite) != 1 || nova->vl_limite < 0)
+    {
         return 0;
     }
 
@@ -100,18 +105,19 @@ int cadastrar_dados(Conta *nova, Conta *inicio) {
     return 1;
 }
 
+void cadastrar_inicio(Conta **inicio)
+{
 
+    Conta *nova = (Conta *)malloc(sizeof(Conta));
 
-void cadastrar_inicio(Conta **inicio) {
-
-    Conta *nova = (Conta *) malloc(sizeof(Conta));
-
-    if (nova == NULL) {
+    if (nova == NULL)
+    {
 
         return;
     }
 
-    if (!cadastrar_dados(nova, *inicio)) {
+    if (!cadastrar_dados(nova, *inicio))
+    {
 
         free(nova);
         return;
@@ -119,7 +125,8 @@ void cadastrar_inicio(Conta **inicio) {
 
     nova->prox = *inicio;
 
-    if (*inicio != NULL) {
+    if (*inicio != NULL)
+    {
 
         (*inicio)->ant = nova;
     }
@@ -128,54 +135,54 @@ void cadastrar_inicio(Conta **inicio) {
 
     gotoxy(5, 25);
     printf("Conta cadastrada com sucesso!");
-
 }
 
+void cadastrar_final(Conta **inicio)
+{
 
-
-void cadastrar_final(Conta **inicio) {
-
-    Conta *nova = (Conta *) malloc(sizeof(Conta));
+    Conta *nova = (Conta *)malloc(sizeof(Conta));
     Conta *aux;
 
-    if (nova == NULL) {
+    if (nova == NULL)
+    {
 
         return;
     }
 
-    if (!cadastrar_dados(nova, *inicio)) {
+    if (!cadastrar_dados(nova, *inicio))
+    {
 
         free(nova);
         return;
     }
 
-    if (*inicio == NULL) {
+    if (*inicio == NULL)
+    {
 
         *inicio = nova;
     }
 
-    else {
+    else
+    {
 
         aux = *inicio;
 
-        while (aux->prox != NULL) {
+        while (aux->prox != NULL)
+        {
 
             aux = aux->prox;
         }
 
         aux->prox = nova;
         nova->ant = aux;
-
     }
 
     gotoxy(5, 25);
     printf("Conta cadastrada com sucesso!");
-
 }
 
-
-
-void cadastrar_posicao(Conta **inicio) {
+void cadastrar_posicao(Conta **inicio)
+{
 
     Conta *nova;
     Conta *aux;
@@ -189,7 +196,8 @@ void cadastrar_posicao(Conta **inicio) {
     scanf("%d", &posicao);
     getchar();
 
-    if (posicao < 1) {
+    if (posicao < 1)
+    {
 
         gotoxy(5, 25);
         printf("Posicao invalida!");
@@ -197,7 +205,8 @@ void cadastrar_posicao(Conta **inicio) {
         return;
     }
 
-    if (posicao == 1) {
+    if (posicao == 1)
+    {
 
         cadastrar_inicio(inicio);
 
@@ -206,29 +215,31 @@ void cadastrar_posicao(Conta **inicio) {
 
     aux = *inicio;
 
-    while (aux != NULL && contador < posicao - 1) {
+    while (aux != NULL && contador < posicao - 1)
+    {
 
         aux = aux->prox;
         contador++;
-
     }
 
-    if (aux == NULL) {
+    if (aux == NULL)
+    {
 
         gotoxy(5, 25);
         printf("Posicao inexistente!");
         return;
-
     }
 
-    nova = (Conta *) malloc(sizeof(Conta));
+    nova = (Conta *)malloc(sizeof(Conta));
 
-    if (nova == NULL) {
+    if (nova == NULL)
+    {
 
         return;
     }
 
-    if (!cadastrar_dados(nova, *inicio)) {
+    if (!cadastrar_dados(nova, *inicio))
+    {
 
         free(nova);
         return;
@@ -237,7 +248,8 @@ void cadastrar_posicao(Conta **inicio) {
     nova->prox = aux->prox;
     nova->ant = aux;
 
-    if (aux->prox != NULL) {
+    if (aux->prox != NULL)
+    {
 
         aux->prox->ant = nova;
     }
@@ -246,19 +258,18 @@ void cadastrar_posicao(Conta **inicio) {
 
     gotoxy(5, 25);
     printf("Conta cadastrada com sucesso!");
-    
 }
 
-
-
-void listar_contas(Conta *inicio) {
+void listar_contas(Conta *inicio)
+{
 
     int linha = 10;
 
     system("cls");
     cabecalho("CONSULTA DE CONTAS BANCARIAS");
 
-    if (inicio == NULL) {
+    if (inicio == NULL)
+    {
 
         gotoxy(5, 15);
         printf("Nenhuma conta cadastrada.");
@@ -266,7 +277,8 @@ void listar_contas(Conta *inicio) {
         return;
     }
 
-    while (inicio != NULL) {
+    while (inicio != NULL)
+    {
 
         gotoxy(5, linha);
         printf("Codigo: %d", inicio->codigo_conta);
@@ -288,7 +300,8 @@ void listar_contas(Conta *inicio) {
         linha += 5;
         inicio = inicio->prox;
 
-        if (linha > 23 && inicio != NULL) {
+        if (linha > 23 && inicio != NULL)
+        {
 
             gotoxy(5, 26);
             printf("Existem mais contas. Pressione uma tecla para continuar.");
@@ -296,15 +309,6 @@ void listar_contas(Conta *inicio) {
             system("cls");
             cabecalho("CONSULTA DE CONTAS BANCARIAS");
             linha = 10;
-
         }
-
     }
-
 }
-
-
-
-
-
-
