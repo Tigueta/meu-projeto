@@ -74,11 +74,15 @@ void cabecalho(char titulo[]) {
 
 char ler_opcao() {
 
+    char opcao;
 
     gotoxy(5, 26);
     printf("Escolha uma opcao: ");
-    return getch();
 
+    scanf(" %c", &opcao);
+    getchar();
+
+    return opcao;
 }
 
 
@@ -91,7 +95,7 @@ void pausar() {
 }
 
 
-void menu_contas(Conta **inicio) {
+void menu_contas(Conta **inicio, Movimentacao *movimentos) {
 
     char opcao;
 
@@ -225,6 +229,7 @@ void menu_movimentacao() {
 int main() {
 
     Conta *inicio_contas = NULL;
+    Movimentacao *inicio_movimentacoes = NULL;
     char opcao;
 
     system("color 0F");
@@ -248,7 +253,7 @@ int main() {
         switch (opcao) {
 
             case '1':
-                menu_contas(&inicio_contas);
+                menu_contas(&inicio_contas, inicio_movimentacoes);
                 break;
 
             case '2':
