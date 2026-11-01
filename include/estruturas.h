@@ -2,7 +2,7 @@
  * Nome: Santiago Gabriel Reyes
  * Data: 30/10/26
  * Arquivo: estruturas.h
- * Descricao: Contem as estruturas e os prototipos das funcoes do sistema.
+ * Descricao: Contem as estruturas de dados e os prototipos das funcoes do sistema bancario.
  */
 
 typedef struct Conta
@@ -49,3 +49,6 @@ void alterar_conta(Conta *inicio);
 void remover_inicio(Conta **inicio, Movimentacao *movimentos);
 void remover_final(Conta **inicio, Movimentacao *movimentos);
 void remover_posicao(Conta **inicio, Movimentacao *movimentos);
+void consultar_conta(Conta*inicio);
+
+
