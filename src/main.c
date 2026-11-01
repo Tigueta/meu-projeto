@@ -1,8 +1,8 @@
 /*
  * Nome: Santiago Gabriel Reyes
- * Data: 30/10/26
+ * Data: 31/10/26
  * Arquivo: main.c
- * Descricao: Contem a funcao principal e os menus do sistema bancario.
+ * Descricao: Contem a funcao principal do sistema, os menus de navegacao e as funcoes de exibicao e controle das telas.
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -87,7 +87,7 @@ char ler_opcao()
 void pausar()
 {
 
-    gotoxy(5, 28);
+    gotoxy(5, 27);
     printf("Pressione qualquer tecla para continuar...");
     getch();
 }
@@ -144,6 +144,21 @@ void menu_contas(Conta **inicio, Movimentacao *movimentos)
             pausar();
             break;
 
+        case '4':
+            remover_final(inicio, movimentos);
+            pausar();
+            break;
+
+        case '5':
+            remover_inicio(inicio, movimentos);
+            pausar();
+            break;
+
+        case '6':
+            remover_posicao(inicio, movimentos);
+            pausar();
+            break;
+
         case '7':
 
             alterar_conta(*inicio);
@@ -158,15 +173,6 @@ void menu_contas(Conta **inicio, Movimentacao *movimentos)
 
         case '9':
 
-            break;
-
-        case '4':
-        case '5':
-        case '6':
-            cabecalho("FUNCIONALIDADE EM DESENVOLVIMENTO");
-            gotoxy(20, 15);
-            printf("Esta opcao sera implementada posteriormente.");
-            pausar();
             break;
 
         default:
@@ -285,3 +291,5 @@ int main()
 
     return 0;
 }
+
+

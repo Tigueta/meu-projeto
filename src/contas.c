@@ -1,8 +1,11 @@
 /*
- * Nome: Santiago Gabriel Reyes
- * Data: 30/10/26
+ * Nome: Santiago Gabriel Reyes e Jose Manuel Salazar
+ * Data: 31/10/26
  * Arquivo: contas.c
- * Descricao: Contem as funcoes de cadastro e consulta de contas bancarias.
+ * Descricao: Contem as funcoes de cadastro, consulta, alteracao e remocao de contas bancarias.
+ * 
+ * (Santiago: Incluiu funcoes de cadastro, consulta e remocao)
+ * (Jose: Incluiu funcoes de alteracao)
  */
 
 #include <stdio.h>
@@ -263,10 +266,19 @@ void cadastrar_posicao(Conta **inicio)
 void listar_contas(Conta *inicio)
 {
 
-    int linha = 10;
+    int codigo;
+    int encontrou = 0;
+    int linha = 12;
+
+    Conta *aux = inicio;
 
     system("cls");
     cabecalho("CONSULTA DE CONTAS BANCARIAS");
+
+    gotoxy(5, 10);
+    printf("Informe o codigo da conta (0 para listar todas):");
+    scanf("%d", &codigo);
+    getchar();
 
     if (inicio == NULL)
     {
@@ -275,43 +287,61 @@ void listar_contas(Conta *inicio)
         printf("Nenhuma conta cadastrada.");
 
         return;
+
     }
 
-    while (inicio != NULL)
+    while (aux != NULL)
     {
+        if (codigo == 0 || aux->codigo_conta == codigo) {
 
-        gotoxy(5, linha);
-        printf("Codigo: %d", inicio->codigo_conta);
-        gotoxy(35, linha);
-        printf("Banco: %s", inicio->banco);
-        gotoxy(5, linha + 1);
-        printf("Agencia: %s", inicio->agencia);
-        gotoxy(35, linha + 1);
-        printf("Conta: %s", inicio->numero_conta);
-        gotoxy(5, linha + 2);
-        printf("Tipo: %s", inicio->tipo_conta);
-        gotoxy(35, linha + 2);
-        printf("Saldo: R$ %.2f", inicio->vl_saldo);
-        gotoxy(5, linha + 3);
-        printf("Limite: R$ %.2f", inicio->vl_limite);
-        gotoxy(35, linha + 3);
-        printf("Status: %s", inicio->status);
+            encontrou = 1;
 
-        linha += 5;
-        inicio = inicio->prox;
+            gotoxy(5, linha);
+            printf("Codigo : %d", aux->codigo_conta);
+            gotoxy(35, linha);
+            printf("Banco: %s", aux->banco);
+            gotoxy(5, linha + 1);
+            printf("Agencia: %s", aux->agencia);
+            gotoxy(35, linha + 1);
+            printf("Conta: %s", aux->numero_conta);
+            gotoxy(5, linha + 2);
+            printf("Tipo: %s", aux->tipo_conta);
+            gotoxy(35, linha + 2);
+            printf("Saldo: R$ %.2f", aux->vl_saldo);
+            gotoxy(5, linha + 3);
+            printf("Limite: R$ %.2f", aux->vl_limite);
+            gotoxy(35, linha + 3);
+            printf("Status: %s", aux->status);
 
-        if (linha > 23 && inicio != NULL)
-        {
+            linha += 5;
 
-            gotoxy(5, 26);
-            printf("Existem mais contas. Pressione uma tecla para continuar.");
-            getchar();
-            system("cls");
-            cabecalho("CONSULTA DE CONTAS BANCARIAS");
-            linha = 10;
-        }
+            if (linha > 23 && aux->prox != NULL && codigo == 0) {
+
+                gotoxy(5, 27);
+                printf("Pressione uma tecla para continuar...");
+                getchar();
+
+                system("cls");
+                cabecalho("CONSULTA DE CONTAS BANCARIAS");
+                linha = 10;
+
+            }
+
+        } 
+
+        aux = aux->prox;
+
+    } 
+
+    if (!encontrou) {
+
+        gotoxy(5, 15);
+        printf("Conta nao encontrada!");
+    
     }
+
 }
+
 
 void alterar_conta(Conta *inicio)
 {
@@ -379,3 +409,175 @@ int conta_tem_movimentacao(Movimentacao *movimentos, int codigo)
 
     return 0;
 }
+
+void remover_inicio(Conta **inicio, Movimentacao *movimentos)
+{
+
+    Conta *aux;
+
+
+    if (*inicio == NULL) {
+
+        gotoxy(5, 25);
+        printf("Nenhuma conta cadastrada!");
+        return;
+
+    }
+
+    aux = *inicio;
+
+    if (conta_tem_movimentacao(movimentos, aux->codigo_conta)) {
+
+        gotoxy(5, 25);
+        printf("Conta possui movimentacoes e nao pode ser removida!");
+
+        return;
+
+    }
+
+    *inicio = aux->prox;
+
+    if (*inicio != NULL) {
+
+        (*inicio)->ant = NULL;
+
+    }
+
+    free(aux);
+
+    gotoxy(5, 25);
+    printf("Conta removida com sucesso!");
+
+}
+
+void remover_final(Conta **inicio, Movimentacao *movimentos) {
+
+    Conta *aux;
+
+    if (*inicio == NULL) {
+
+        gotoxy(5, 25);
+        printf("Nenhuma conta cadastrada!");
+        return;
+
+    }
+
+    aux = *inicio;
+
+    while (aux->prox != NULL) {
+
+        aux = aux->prox;
+
+    }
+
+    if (conta_tem_movimentacao(movimentos, aux->codigo_conta)) {
+
+        gotoxy(5, 25);
+        printf("Conta possui movimentacoes e nao pode ser removida!");
+        return;
+
+    }
+
+    if (aux->ant != NULL) {
+
+        aux->ant->prox = NULL;
+
+    } else {
+
+        *inicio = NULL;
+
+    }
+
+
+    free(aux);
+
+    gotoxy(5, 25);
+    printf("Conta removida com sucesso!");
+
+}
+
+void remover_posicao(Conta **inicio, Movimentacao *movimentos) {
+
+
+    Conta *aux;
+    int posicao;
+    int contador = 1;
+
+
+    if (*inicio == NULL) {
+
+        gotoxy(5, 25);
+        printf("Nenhuma conta cadastrada!");
+
+        return;
+
+    }
+
+    system("cls");
+    cabecalho("REMOVER CONTA POR POSICAO");
+    gotoxy(5, 10);
+    printf("Informe a posicao: ");
+    scanf("%d", &posicao);
+    getchar();
+
+
+    if (posicao < 1) {
+
+        gotoxy(5, 25);
+        printf("Posicao invalida!");
+
+        return;
+    }
+
+    aux = *inicio;
+
+    while (aux != NULL && contador < posicao) {
+
+        aux = aux->prox;
+        contador++;
+
+    }
+
+    if (aux == NULL) {
+
+        gotoxy(5, 25);
+        printf("Posicao inexistente!");
+
+        return;
+    }
+
+    if (conta_tem_movimentacao(movimentos, aux->codigo_conta)) {
+
+        gotoxy(5, 25);
+        printf("Conta possui movimentacoes e nao pode ser removida!");
+
+        return;
+
+    }
+
+    if (aux->ant != NULL) {
+
+        aux->ant->prox = aux->prox;
+
+    } else {
+
+        *inicio = aux->prox;
+
+    }
+
+    if (aux->prox != NULL) {
+
+        aux->prox->ant = aux->ant;
+        
+    }
+
+    free(aux);
+
+    gotoxy(5, 25);
+    printf("Conta removida com sucesso!");
+
+
+}
+
+
+
