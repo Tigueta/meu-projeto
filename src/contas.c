@@ -1,16 +1,15 @@
 /*
- * Nome: Santiago Gabriel Reyes e Jose Manuel Salazar
+ * Nome: Jose Manuel Salazar e Santiago Gabriel Reyes
  * Data: 31/10/26
  * Arquivo: contas.c
- * Descricao: Contem as funcoes de cadastro, consulta, alteracao e remocao de contas bancarias.
- * 
- * (Santiago: Incluiu funcoes de cadastro, consulta e remocao)
- * (Jose: Incluiu funcoes de alteracao)
+ * Descricao: Contem as funcoes de cadastro e consulta de contas bancarias.
+ *
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <conio.h>
 #include "../include/estruturas.h"
 
 void gotoxy(int x, int y);
@@ -266,19 +265,10 @@ void cadastrar_posicao(Conta **inicio)
 void listar_contas(Conta *inicio)
 {
 
-    int codigo;
-    int encontrou = 0;
-    int linha = 12;
-
-    Conta *aux = inicio;
+    int linha = 10;
 
     system("cls");
     cabecalho("CONSULTA DE CONTAS BANCARIAS");
-
-    gotoxy(5, 10);
-    printf("Informe o codigo da conta (0 para listar todas):");
-    scanf("%d", &codigo);
-    getchar();
 
     if (inicio == NULL)
     {
@@ -287,61 +277,43 @@ void listar_contas(Conta *inicio)
         printf("Nenhuma conta cadastrada.");
 
         return;
-
     }
 
-    while (aux != NULL)
+    while (inicio != NULL)
     {
-        if (codigo == 0 || aux->codigo_conta == codigo) {
 
-            encontrou = 1;
+        gotoxy(5, linha);
+        printf("Codigo: %d", inicio->codigo_conta);
+        gotoxy(35, linha);
+        printf("Banco: %s", inicio->banco);
+        gotoxy(5, linha + 1);
+        printf("Agencia: %s", inicio->agencia);
+        gotoxy(35, linha + 1);
+        printf("Conta: %s", inicio->numero_conta);
+        gotoxy(5, linha + 2);
+        printf("Tipo: %s", inicio->tipo_conta);
+        gotoxy(35, linha + 2);
+        printf("Saldo: R$ %.2f", inicio->vl_saldo);
+        gotoxy(5, linha + 3);
+        printf("Limite: R$ %.2f", inicio->vl_limite);
+        gotoxy(35, linha + 3);
+        printf("Status: %s", inicio->status);
 
-            gotoxy(5, linha);
-            printf("Codigo : %d", aux->codigo_conta);
-            gotoxy(35, linha);
-            printf("Banco: %s", aux->banco);
-            gotoxy(5, linha + 1);
-            printf("Agencia: %s", aux->agencia);
-            gotoxy(35, linha + 1);
-            printf("Conta: %s", aux->numero_conta);
-            gotoxy(5, linha + 2);
-            printf("Tipo: %s", aux->tipo_conta);
-            gotoxy(35, linha + 2);
-            printf("Saldo: R$ %.2f", aux->vl_saldo);
-            gotoxy(5, linha + 3);
-            printf("Limite: R$ %.2f", aux->vl_limite);
-            gotoxy(35, linha + 3);
-            printf("Status: %s", aux->status);
+        linha += 5;
+        inicio = inicio->prox;
 
-            linha += 5;
+        if (linha > 23 && inicio != NULL)
+        {
 
-            if (linha > 23 && aux->prox != NULL && codigo == 0) {
-
-                gotoxy(5, 27);
-                printf("Pressione uma tecla para continuar...");
-                getchar();
-
-                system("cls");
-                cabecalho("CONSULTA DE CONTAS BANCARIAS");
-                linha = 10;
-
-            }
-
-        } 
-
-        aux = aux->prox;
-
-    } 
-
-    if (!encontrou) {
-
-        gotoxy(5, 15);
-        printf("Conta nao encontrada!");
-    
+            gotoxy(5, 26);
+            printf("Existem mais contas. Pressione uma tecla para continuar.");
+            getchar();
+            system("cls");
+            cabecalho("CONSULTA DE CONTAS BANCARIAS");
+            linha = 10;
+        }
     }
-
 }
-
 
 void alterar_conta(Conta *inicio)
 {
@@ -578,6 +550,114 @@ void remover_posicao(Conta **inicio, Movimentacao *movimentos) {
 
 
 }
+
+void consultar_contas(Conta *inicio) {
+
+    int codigo;
+    int encontrou = 0;
+    int linha = 13;
+
+    system("cls");
+
+    cabecalho("CONSULTA DE CONTAS BANCARIAS");
+    gotoxy(5, 10);
+    printf("Informe o codigo da conta (0 para todas): ");
+    scanf("%d", &codigo);
+    getchar();
+
+    if (codigo == 0) {
+
+        if (inicio == NULL) {
+
+            gotoxy(5, 15);
+            printf("Nenhuma conta cadastrada!");
+
+            return;
+        }
+
+        while (inicio != NULL) {
+
+            gotoxy(5, linha);
+            printf("Codigo: %d", inicio->codigo_conta);
+            gotoxy(35, linha);
+            printf("Banco: %s", inicio->banco);
+            gotoxy(5, linha + 1);
+            printf("Agencia: %s", inicio->agencia);
+            gotoxy(35, linha + 1);
+            printf("Conta: %s", inicio->numero_conta);
+            gotoxy(5, linha + 2);
+            printf("Tipo: %s", inicio->tipo_conta);
+            gotoxy(35, linha + 2);
+            printf("Saldo: R$ %.2f", inicio->vl_saldo);
+            gotoxy(5, linha + 3);
+            printf("Limite: R$ %.2f", inicio->vl_limite);
+            gotoxy(35, linha + 3);
+            printf("Status: %s", inicio->status);
+
+            linha += 5;
+            inicio = inicio->prox;
+
+            if (linha > 23 && inicio != NULL) {
+
+                gotoxy(5, 26);
+                printf("Pressione uma tecla para continuar...");
+                getch();
+
+                system("cls");
+                cabecalho("CONSULTA DE CONTAS BANCARIAS");
+                linha = 10;
+
+            }
+
+        }
+
+        return;
+    }
+
+    while (inicio != NULL) {
+
+        if (inicio->codigo_conta == codigo) {
+
+            encontrou = 1;
+
+            gotoxy(5, linha);
+            printf("Codigo: %d", inicio->codigo_conta);
+            gotoxy(5, linha + 1);
+            printf("Banco: %s", inicio->banco);
+            gotoxy(5, linha + 2);
+            printf("Agencia: %s", inicio->agencia);
+            gotoxy(5, linha + 3);
+            printf("Conta: %s", inicio->numero_conta);
+            gotoxy(5, linha + 4);
+            printf("Tipo: %s", inicio->tipo_conta);
+            gotoxy(5, linha + 5);
+            printf("Saldo: R$ %.2f", inicio->vl_saldo);
+            gotoxy(5, linha + 6);
+            printf("Limite: R$ %.2f", inicio->vl_limite);
+            gotoxy(5, linha + 7);
+            printf("Status: %s", inicio->status);
+
+            break;
+
+        }
+
+        inicio = inicio->prox;
+
+    }
+
+    if (!encontrou) {
+
+        gotoxy(5, 25);
+        printf("Conta nao encontrada!");
+
+    }
+
+    gotoxy(5, 27);
+    printf("Pressione uma tecla para voltar...");
+    getch();
+
+}
+
 
 
 

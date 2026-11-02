@@ -167,7 +167,7 @@ void menu_contas(Conta **inicio, Movimentacao *movimentos)
 
         case '8':
 
-            listar_contas(*inicio);
+            consultar_contas(*inicio);
             pausar();
             break;
 
@@ -186,7 +186,7 @@ void menu_contas(Conta **inicio, Movimentacao *movimentos)
     } while (opcao != '9');
 }
 
-void menu_movimentacao()
+void menu_movimentacao(Conta *contas, Movimentacao **movimentos)
 {
 
     char opcao;
@@ -208,19 +208,27 @@ void menu_movimentacao()
 
         opcao = ler_opcao();
 
-        if (opcao >= '1' && opcao <= '3')
+        switch (opcao)
         {
-
-            system("cls");
-            cabecalho("FUNCIONALIDADE EM DESENVOLVIMENTO");
-            gotoxy(20, 15);
-            printf("Esta opcao sera implementada posteriormente.");
+        case '1':
+            realizar_movimentacao(contas, movimentos);
             pausar();
-        }
+            break;
 
-        else if (opcao != '4')
-        {
+        case '2':
+            realizar_transferencia(contas, movimentos);
+            pausar();
+            break;
 
+        case '3':
+            consultar_movimentacoes(contas, *movimentos);
+            pausar();
+            break;
+
+        case '4':
+            break;
+
+        default:
             system("cls");
             cabecalho("OPCAO INVALIDA");
             gotoxy(35, 15);
@@ -266,7 +274,7 @@ int main()
 
         case '2':
 
-            menu_movimentacao();
+            menu_movimentacao(inicio_contas, &inicio_movimentacoes);
             break;
 
         case '3':
@@ -291,5 +299,3 @@ int main()
 
     return 0;
 }
-
-
