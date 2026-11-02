@@ -167,7 +167,7 @@ void menu_contas(Conta **inicio, Movimentacao *movimentos)
 
         case '8':
 
-            listar_contas(*inicio);
+            consultar_contas(*inicio);
             pausar();
             break;
 
@@ -216,10 +216,7 @@ void menu_movimentacao(Conta *contas, Movimentacao **movimentos)
             break;
 
         case '2':
-            system("cls");
-            cabecalho("FUNCIONALIDADE EM DESENVOLVIMENTO");
-            gotoxy(20, 15);
-            printf("Transferencia sera implementada posteriormente.");
+            realizar_transferencia(contas, movimentos);
             pausar();
             break;
 
