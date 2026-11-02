@@ -49,6 +49,7 @@ void alterar_conta(Conta *inicio);
 void remover_inicio(Conta **inicio, Movimentacao *movimentos);
 void remover_final(Conta **inicio, Movimentacao *movimentos);
 void remover_posicao(Conta **inicio, Movimentacao *movimentos);
-void consultar_conta(Conta*inicio);
+void consultar_conta(Conta *inicio);
 
-
+void realizar_movimentacao(Conta *contas, Movimentacao **movimentos);
+void consultar_movimentacoes(Conta *contas, Movimentacao *movimentos);
