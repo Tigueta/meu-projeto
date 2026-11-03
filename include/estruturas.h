@@ -54,3 +54,7 @@ void realizar_movimentacao(Conta *contas, Movimentacao **movimentos);
 void consultar_movimentacoes(Conta *contas, Movimentacao *movimentos);
 void realizar_transferencia(Conta *contas, Movimentacao **movimentos);
 
+int salvar_contas(Conta *inicio);
+int carregar_contas(Conta **inicio);
+int salvar_movimentacoes(Movimentacao *inicio);
+int carregar_movimentacoes(Movimentacao **inicio);
