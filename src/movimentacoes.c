@@ -58,6 +58,8 @@ int converter_data(char data[]) {
     return ano * 10000 + mes * 100 + dia;
 }
 
+
+
 void realizar_movimentacao(Conta *contas, Movimentacao **movimentos) {
 
     Conta *conta = contas;
@@ -262,6 +264,8 @@ void realizar_movimentacao(Conta *contas, Movimentacao **movimentos) {
 
 }
 
+
+
 void consultar_movimentacoes(Conta *contas, Movimentacao *movimentos) {
 
     int codigo;
@@ -325,6 +329,7 @@ void consultar_movimentacoes(Conta *contas, Movimentacao *movimentos) {
     getch();
 
 }
+
 
 
 void realizar_transferencia(Conta *contas, Movimentacao **movimentos) {

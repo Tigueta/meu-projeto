@@ -239,11 +239,13 @@ void menu_movimentacao(Conta *contas, Movimentacao **movimentos)
     } while (opcao != '4');
 }
 
-int main()
-{
+int main() {
 
     Conta *inicio_contas = NULL;
     Movimentacao *inicio_movimentacoes = NULL;
+    carregar_contas(&inicio_contas);
+    carregar_movimentacoes(&inicio_movimentacoes);
+
     char opcao;
 
     system("color 0F");
@@ -279,12 +281,13 @@ int main()
 
         case '3':
 
-            system("cls");
-            cabecalho("ENCERRANDO O SISTEMA");
-            gotoxy(35, 15);
-            printf("Programa encerrado!");
+            salvar_contas(inicio_contas);
+            salvar_movimentacoes(inicio_movimentacoes);
+
+            printf("Dados salvos com sucesso!");
             Sleep(1000);
-            break;
+
+            return 0;
 
         default:
 
@@ -298,4 +301,5 @@ int main()
     } while (opcao != '3');
 
     return 0;
+
 }
