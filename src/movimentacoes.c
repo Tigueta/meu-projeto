@@ -31,6 +31,7 @@ int converter_data(char data[]) {
         return 0;
     }
 
+
     dias_mes = 31;
 
     if (mes == 4 || mes == 6 || mes == 9 || mes == 11) {
@@ -76,7 +77,6 @@ void realizar_movimentacao(Conta *contas, Movimentacao **movimentos) {
     char entrada[100];
     char tipo;
     char data[20];
-
     double valor;
 
     system("cls");
@@ -230,6 +230,9 @@ void realizar_movimentacao(Conta *contas, Movimentacao **movimentos) {
     nova->codigo_conta = codigo;
 
     strcpy(nova->dt_movimento, data);
+
+
+
 
     if (tipo == 'C' || tipo == 'c'){
 
@@ -505,7 +508,7 @@ void realizar_transferencia(Conta *contas, Movimentacao **movimentos) {
     if (data_nova < data_origem || data_nova < data_destino) {
 
         gotoxy(5, 25);
-        printf("Data anterior a ultima movimentacao!");
+        printf("Data não pode ser anterior a ultima movimentacao!");
 
         return;
 
