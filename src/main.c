@@ -239,7 +239,74 @@ void menu_movimentacao(Conta *contas, Movimentacao **movimentos)
     } while (opcao != '4');
 }
 
-int main() {
+void menu_relatorios(Conta *contas, Movimentacao *movimentos)
+{
+
+    char opcao;
+
+    do
+    {
+
+        system("cls");
+        cabecalho("MENU DE RELATORIOS");
+
+        gotoxy(5, 11);
+        printf("1 - Relatorio de Contas Cadastradas");
+
+        gotoxy(5, 14);
+        printf("2 - Relatorio de Movimentacoes de uma Conta");
+
+        gotoxy(5, 17);
+        printf("3 - Relatorio de Contas Inativas");
+
+        gotoxy(5, 20);
+        printf("4 - Relatorio de Limites de Credito");
+
+        gotoxy(5, 23);
+        printf("5 - Retornar ao Menu Principal");
+
+        opcao = ler_opcao();
+
+        switch (opcao)
+        {
+
+        case '1':
+            relatorio_contas(contas);
+            pausar();
+            break;
+
+        case '2':
+            relatorio_extrato(contas, movimentos);
+            pausar();
+            break;
+
+        case '3':
+            relatorio_inativas(contas);
+            pausar();
+            break;
+
+        case '4':
+            relatorio_limites(contas);
+            pausar();
+            break;
+
+        case '5':
+            break;
+
+        default:
+
+            system("cls");
+            cabecalho("OPCAO INVALIDA");
+            gotoxy(35, 15);
+            printf("Tente novamente.");
+            pausar();
+        }
+
+    } while (opcao != '5');
+}
+
+int main()
+{
 
     Conta *inicio_contas = NULL;
     Movimentacao *inicio_movimentacoes = NULL;
@@ -263,7 +330,10 @@ int main() {
         printf("2 - Movimentacao bancaria");
 
         gotoxy(5, 18);
-        printf("3 - Sair do programa");
+        printf("3 - Relatorios");
+
+        gotoxy(5, 21);
+        printf("4 - Sair do programa");
 
         opcao = ler_opcao();
 
@@ -280,6 +350,10 @@ int main() {
             break;
 
         case '3':
+            menu_relatorios(inicio_contas, inicio_movimentacoes);
+            break;
+
+        case '4':
 
             salvar_contas(inicio_contas);
             salvar_movimentacoes(inicio_movimentacoes);
@@ -298,8 +372,7 @@ int main() {
             pausar();
         }
 
-    } while (opcao != '3');
+    } while (opcao != '4');
 
     return 0;
-
 }
