@@ -33,9 +33,9 @@ int codigo_existe(Conta *inicio, int codigo)
     return 0;
 }
 
-int cadastrar_dados(Conta *nova, Conta *inicio)
-{
+int cadastrar_dados(Conta *nova, Conta *inicio) {
 
+    int opcao;
     char entrada[100];
 
     system("cls");
@@ -44,16 +44,19 @@ int cadastrar_dados(Conta *nova, Conta *inicio)
     printf("Codigo da conta: ");
     fgets(entrada, sizeof(entrada), stdin);
 
-    if (sscanf(entrada, "%d", &nova->codigo_conta) != 1 || nova->codigo_conta <= 0)
-    {
+    if (sscanf(entrada, "%d", &nova->codigo_conta) != 1 || nova->codigo_conta <= 0) {
+
         return 0;
+
     }
 
-    if (codigo_existe(inicio, nova->codigo_conta))
-    {
+    if (codigo_existe(inicio, nova->codigo_conta)) {
+
         gotoxy(5, 25);
         printf("Esse codigo ja esta cadastrado!");
+
         return 0;
+
     }
 
     gotoxy(5, 12);
@@ -85,30 +88,52 @@ int cadastrar_dados(Conta *nova, Conta *inicio)
 
     fgets(entrada, sizeof(entrada), stdin);
 
-    if (sscanf(entrada, "%lf", &nova->vl_saldo) != 1 || nova->vl_saldo < 0)
-    {
+    if (sscanf(entrada, "%lf", &nova->vl_saldo) != 1 || nova->vl_saldo < 0) {
+
         return 0;
+
     }
 
     gotoxy(5, 22);
     printf("Limite da conta: ");
     fgets(entrada, sizeof(entrada), stdin);
 
-    if (sscanf(entrada, "%lf", &nova->vl_limite) != 1 || nova->vl_limite < 0)
-    {
+    if (sscanf(entrada, "%lf", &nova->vl_limite) != 1 || nova->vl_limite < 0) {
+
         return 0;
+
+    }   
+
+    gotoxy(5, 24);
+    printf("Status da conta (1 - Ativa / 2 - Inativa): ");
+    fgets(entrada, sizeof(entrada), stdin);
+
+    if (sscanf(entrada, "%d", &opcao) != 1 || (opcao != 1 && opcao != 2)) {
+
+        return 0;
+
     }
 
-    strcpy(nova->status, "ativo");
+    if (opcao == 1) {
+
+        strcpy(nova->status, "ativo");
+
+    } else {
+
+        strcpy(nova->status, "inativo");
+
+    }
 
     nova->ant = NULL;
     nova->prox = NULL;
 
     return 1;
+
 }
 
-void cadastrar_inicio(Conta **inicio)
-{
+
+
+void cadastrar_inicio(Conta **inicio) {
 
     Conta *nova = (Conta *)malloc(sizeof(Conta));
 
@@ -555,12 +580,12 @@ void consultar_contas(Conta *inicio) {
 
     int codigo;
     int encontrou = 0;
-    int linha = 13;
+    int linha = 11;
 
     system("cls");
 
     cabecalho("CONSULTA DE CONTAS BANCARIAS");
-    gotoxy(5, 10);
+    gotoxy(5, 9);
     printf("Informe o codigo da conta (0 para todas): ");
     scanf("%d", &codigo);
     getchar();
@@ -658,6 +683,57 @@ void consultar_contas(Conta *inicio) {
 
 }
 
+void ordenar_contas(Conta **inicio) {
 
+    Conta *atual = *inicio;
+    Conta *proximo;
+    Conta *ordenada = NULL;
+    Conta *aux;
+
+    while (atual != NULL) {
+
+        proximo = atual->prox;
+
+        if (ordenada == NULL || atual->codigo_conta < ordenada->codigo_conta) {
+
+            atual->ant = NULL;
+            atual->prox = ordenada;
+
+            if (ordenada != NULL) {
+
+                ordenada->ant = atual;
+            }
+
+            ordenada = atual;
+
+        } else {
+
+            aux = ordenada;
+
+            while (aux->prox != NULL && aux->prox->codigo_conta < atual->codigo_conta) {
+
+                aux = aux->prox;
+                
+            }
+
+            atual->prox = aux->prox;
+            atual->ant = aux;
+
+            if (aux->prox != NULL) {
+
+                aux->prox->ant = atual;
+            }
+
+            aux->prox = atual;
+
+        }
+
+        atual = proximo;
+
+    }
+
+    *inicio = ordenada;
+    
+}
 
 

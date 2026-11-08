@@ -58,8 +58,12 @@ int salvar_contas(Conta *inicio);
 int carregar_contas(Conta **inicio);
 int salvar_movimentacoes(Movimentacao *inicio);
 int carregar_movimentacoes(Movimentacao **inicio);
+void liberar_contas(Conta *inicio);
 
 void relatorio_contas(Conta *inicio);
 void relatorio_extrato(Conta *contas, Movimentacao *movimentos);
 void relatorio_inativas(Conta *inicio);
 void relatorio_limites(Conta *inicio);
+
+void ordenar_contas(Conta **inicio);
+

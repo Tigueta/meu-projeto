@@ -1,8 +1,10 @@
 /*
-Meu nome:jose Manuel
-
-
-*/
+ * Nome: Jose Manuel Salazar e Santiago Gabriel Reyes
+ * Data: 01/11/26
+ * Arquivo: arquivos.c
+ * Descricao: Contem as funcoes de leitura e escrita de arquivos binarios para persistencia dos dados do sistema bancario.
+ *
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -93,27 +95,30 @@ int texto_valido(char texto[], int tamanho)
     return memchr(texto, '\0', tamanho) != NULL;
 }
 
-int ler_cabecalho(FILE *arquivo, char identificacao[], unsigned int *quantidade)
-{
+int ler_cabecalho(FILE *arquivo, char identificacao[], unsigned int *quantidade) {
+
     Cabecalho cabecalho;
 
     if (fread(&cabecalho, sizeof(cabecalho), 1, arquivo) != 1)
+
         return 0;
 
     if (strcmp(cabecalho.identificacao, identificacao) != 0)
+
         return 0;
 
-    if (cabecalho.versao != 1 ||
-        cabecalho.quantidade > MAX_REGISTROS)
+    if (cabecalho.versao != 1 || cabecalho.quantidade > MAX_REGISTROS)
+
         return 0;
 
     *quantidade = cabecalho.quantidade;
 
     return 1;
+
 }
 
-int salvar_contas(Conta *inicio)
-{
+int salvar_contas(Conta *inicio) {
+
     FILE *arquivo;
     Conta *aux;
     DadosConta dados;
@@ -121,17 +126,20 @@ int salvar_contas(Conta *inicio)
     unsigned int quantidade = 0;
     int sucesso = 1;
 
-    for (aux = inicio; aux != NULL; aux = aux->prox)
-    {
+    for (aux = inicio; aux != NULL; aux = aux->prox) {
+
         if (quantidade >= MAX_REGISTROS)
+
             return 0;
 
         quantidade++;
+
     }
 
     arquivo = fopen(TEMP_CONTAS, "wb");
 
     if (arquivo == NULL)
+
         return 0;
 
     memset(&cabecalho, 0, sizeof(cabecalho));
@@ -420,3 +428,4 @@ int carregar_movimentacoes(Movimentacao **inicio)
 
     return 1;
 }
+
