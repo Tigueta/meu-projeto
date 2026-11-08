@@ -10,6 +10,8 @@
 #include <conio.h>
 #include "../include/estruturas.h"
 
+
+
 void gotoxy(int x, int y)
 {
 
@@ -19,6 +21,9 @@ void gotoxy(int x, int y)
 
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), posicao);
 }
+
+
+
 
 void desenhar_tela()
 {
@@ -102,24 +107,26 @@ void menu_contas(Conta **inicio, Movimentacao *movimentos)
 
         system("cls");
         cabecalho("MENU DE CONTAS BANCARIAS");
-        gotoxy(5, 11);
+        gotoxy(5, 10);
         printf("1 - Cadastrar Contas Bancarias no Final");
-        gotoxy(5, 13);
+        gotoxy(5, 11);
         printf("2 - Cadastrar Contas Bancarias no Inicio");
-        gotoxy(5, 15);
+        gotoxy(5, 12);
         printf("3 - Cadastrar Contas Bancarias na Posicao");
-        gotoxy(5, 17);
+        gotoxy(5, 14);
         printf("4 - Remover Contas Bancarias no Final");
-        gotoxy(5, 18);
+        gotoxy(5, 15);
         printf("5 - Remover Contas Bancarias no Inicio");
-        gotoxy(5, 19);
+        gotoxy(5, 16);
         printf("6 - Remover Contas Bancarias na Posicao");
-        gotoxy(5, 21);
+        gotoxy(5, 18);
         printf("7 - Alteracao das Contas Bancarias");
-        gotoxy(5, 22);
+        gotoxy(5, 19);
         printf("8 - Consultar Contas Bancarias");
-        gotoxy(5, 24);
-        printf("9 - Retornar ao Menu Anterior");
+        gotoxy(5, 20);
+        printf("9 - Ordenar Contas por Codigo");
+        gotoxy(5, 22);
+        printf("0 - Retornar ao Menu Anterior");
         opcao = ler_opcao();
         system("cls");
 
@@ -173,8 +180,17 @@ void menu_contas(Conta **inicio, Movimentacao *movimentos)
 
         case '9':
 
+            ordenar_contas(inicio);
+            cabecalho("CONTAS ORDENADAS");
+            gotoxy(30, 15);
+            printf("Contas ordenadas com sucesso!");
+            pausar();
             break;
-
+        
+        case '0':
+        
+            break;
+        
         default:
 
             cabecalho("OPCAO INVALIDA");
@@ -183,7 +199,7 @@ void menu_contas(Conta **inicio, Movimentacao *movimentos)
             pausar();
         }
 
-    } while (opcao != '9');
+    } while (opcao != '0');
 }
 
 void menu_movimentacao(Conta *contas, Movimentacao **movimentos)
@@ -238,6 +254,9 @@ void menu_movimentacao(Conta *contas, Movimentacao **movimentos)
 
     } while (opcao != '4');
 }
+
+
+
 
 void menu_relatorios(Conta *contas, Movimentacao *movimentos)
 {
@@ -310,8 +329,21 @@ int main()
 
     Conta *inicio_contas = NULL;
     Movimentacao *inicio_movimentacoes = NULL;
-    carregar_contas(&inicio_contas);
-    carregar_movimentacoes(&inicio_movimentacoes);
+
+    if (!carregar_contas(&inicio_contas)) {
+        
+        printf("Erro ao carregar os dados das contas!");
+
+        return 1;
+    }
+
+    if (!carregar_movimentacoes(&inicio_movimentacoes)) {
+
+        liberar_contas(inicio_contas);
+
+        printf("Erro ao carregar as movimentacoes!");
+        return 1;
+    }
 
     char opcao;
 
@@ -359,7 +391,7 @@ int main()
             salvar_movimentacoes(inicio_movimentacoes);
 
             printf("Dados salvos com sucesso!");
-            Sleep(1000);
+            Sleep(1500);
 
             return 0;
 

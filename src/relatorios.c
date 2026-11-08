@@ -4,7 +4,7 @@
 #include <conio.h>
 #include "../include/estruturas.h"
 
-void gotoxy(int x, int y)
+static void gotoxy(int x, int y)
 {
 
     COORD posicao;
@@ -14,7 +14,7 @@ void gotoxy(int x, int y)
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), posicao);
 }
 
-void desenhar_tela()
+static void desenhar_tela()
 {
 
     int i;
@@ -49,7 +49,9 @@ void desenhar_tela()
     printf("+");
 }
 
-void cabecalho(char titulo[])
+
+
+static void cabecalho(char titulo[])
 {
 
     desenhar_tela();
@@ -64,8 +66,9 @@ void cabecalho(char titulo[])
     printf("%s", titulo);
 }
 
-void relatorio_contas(Conta *inicio)
-{
+
+
+void relatorio_contas(Conta *inicio) {
 
     Conta *aux = inicio;
     int linha = 11;
@@ -81,25 +84,28 @@ void relatorio_contas(Conta *inicio)
         return;
     }
 
-    gotoxy(3, 10);
+    gotoxy(3, 9);
     printf("COD");
 
-    gotoxy(9, 10);
+    gotoxy(9, 9);
     printf("BANCO");
 
-    gotoxy(29, 10);
+    gotoxy(25, 9);
     printf("AGENCIA");
 
-    gotoxy(41, 10);
+    gotoxy(36, 9);
     printf("NUMERO");
 
-    gotoxy(57, 10);
+    gotoxy(51, 9);
     printf("TIPO");
 
-    gotoxy(69, 10);
+    gotoxy(62, 9);
     printf("SALDO");
 
-    gotoxy(82, 10);
+    gotoxy(74, 9);
+    printf("LIMITE");
+
+    gotoxy(87, 9);
     printf("STATUS");
 
     while (aux != NULL)
@@ -111,19 +117,22 @@ void relatorio_contas(Conta *inicio)
         gotoxy(9, linha);
         printf("%.18s", aux->banco);
 
-        gotoxy(29, linha);
+        gotoxy(25, linha);
         printf("%.10s", aux->agencia);
 
-        gotoxy(41, linha);
+        gotoxy(36, linha);
         printf("%.14s", aux->numero_conta);
 
-        gotoxy(57, linha);
+        gotoxy(51, linha);
         printf("%.10s", aux->tipo_conta);
 
-        gotoxy(69, linha);
+        gotoxy(62, linha);
         printf("%.2f", aux->vl_saldo);
 
-        gotoxy(82, linha);
+        gotoxy(74, linha);
+        printf("%.2f", aux->vl_limite);
+
+        gotoxy(87, linha);
         printf("%.8s", aux->status);
 
         aux = aux->prox;
@@ -146,84 +155,122 @@ void relatorio_contas(Conta *inicio)
             gotoxy(9, 10);
             printf("BANCO");
 
-            gotoxy(29, 10);
+            gotoxy(25, 10);
             printf("AGENCIA");
 
-            gotoxy(41, 10);
+            gotoxy(36, 10);
             printf("NUMERO");
 
-            gotoxy(57, 10);
+            gotoxy(51, 10);
             printf("TIPO");
 
-            gotoxy(69, 10);
+            gotoxy(62, 10);
             printf("SALDO");
 
-            gotoxy(82, 10);
+            gotoxy(74, 10);
+            printf("LIMITE");
+
+            gotoxy(87, 10);
             printf("STATUS");
         }
     }
 
     gotoxy(5, 27);
     printf("Relatorio finalizado.");
+
 }
-void relatorio_extrato(Conta *contas, Movimentacao *movimentos)
-{
+
+
+
+void relatorio_extrato(Conta *contas, Movimentacao *movimentos) {
+
     int codigo;
     int encontrou = 0;
+    int linha = 13;
+    int caractere;
+
     Conta *conta = contas;
     Movimentacao *aux = movimentos;
 
-    desenhar_tela_rel();
-    cabecalho_rel("EXTRATO DE CONTA");
+    desenhar_tela();
+    cabecalho("EXTRATO DE CONTA");
 
-    gotoxy_rel(5, 5);
+    gotoxy(5, 7);
     printf("Digite o codigo da conta: ");
     scanf("%d", &codigo);
 
-    while (conta != NULL && conta->codigo_conta != codigo)
-    {
+    while ((caractere = getchar()) != '\n' && caractere != EOF) {}
+
+    while (conta != NULL && conta->codigo_conta != codigo) {
+
         conta = conta->prox;
+
     }
 
-    if (conta == NULL)
-    {
-        gotoxy_rel(5, 8);
+    if (conta == NULL){
+
+        gotoxy(5, 8);
         printf("Conta nao encontrada!");
+
         return;
     }
 
-    gotoxy_rel(5, 7);
+    gotoxy(5, 9);
     printf("Banco: %s", conta->banco);
 
-    gotoxy_rel(5, 8);
+    gotoxy(5, 10);
     printf("Numero da conta: %s", conta->numero_conta);
 
-    gotoxy_rel(5, 10);
+    gotoxy(5, 12);
     printf("DATA       TIPO          FAVORECIDO          VALOR       SALDO");
 
-    while (aux != NULL)
-    {
-        if (aux->codigo_conta == codigo)
-        {
-            gotoxy_rel(5, 12 + encontrou);
+    while (aux != NULL) {
 
-            printf("%-11s %-13s %-20.20s R$ %-9.2f R$ %.2f",
-                   aux->dt_movimento,
-                   aux->tp_movimentacao,
-                   aux->ds_favorecido,
-                   aux->vl_movimento,
-                   aux->vl_saldo);
+        if (aux->codigo_conta == codigo) {
+
+            if (linha > 25) {
+
+                gotoxy(5, 27);
+                printf("Pressione qualquer tecla para continuar...");
+                getch();
+
+                cabecalho("EXTRATO DE CONTA");
+
+                gotoxy(5, 9);
+                printf("Banco: %s", conta->banco);
+
+                gotoxy(5, 10);
+                printf("Numero da conta: %s", conta->numero_conta);
+
+                gotoxy(5, 12);
+                printf("DATA       TIPO          FAVORECIDO          VALOR       SALDO");
+
+                linha = 13;
+                
+            }
+
+            gotoxy(5, linha);
+
+            printf("%-11s %-13s %-20.20s R$ %-9.2f R$ %.2f",aux->dt_movimento,aux->tp_movimentacao,aux->ds_favorecido,aux->vl_movimento,aux->vl_saldo);
 
             encontrou++;
+            linha++;
+
         }
 
         aux = aux->prox;
     }
 
-    if (encontrou == 0)
-    {
-        gotoxy_rel(5, 12);
+    if (encontrou == 0) {
+
+        gotoxy(5, 15);
         printf("Essa conta ainda nao possui movimentacoes.");
+
+    } else {
+
+        gotoxy(5, 27);
+        printf("Extrato finalizado. Total de movimentacoes: %d", encontrou);
+
     }
 }
 
@@ -234,18 +281,18 @@ void relatorio_inativas(Conta *inicio)
     int encontrou = 0;
     int linha = 7;
 
-    desenhar_tela_rel();
-    cabecalho_rel("CONTAS INATIVAS");
+    desenhar_tela();
+    cabecalho("CONTAS INATIVAS");
 
-    gotoxy_rel(5, 5);
-    printf("CODIGO    BANCO                 NUMERO DA CONTA");
+    gotoxy(5, 5);
+    printf("CODIGO====BANCO=================NUMERO DA CONTA");
 
     while (aux != NULL)
     {
 
         if (aux->status[0] == 'I' || aux->status[0] == 'i')
         {
-            gotoxy_rel(5, linha);
+            gotoxy(5, linha);
 
             printf("%-10d %-21.21s %-20s",
                    aux->codigo_conta,
@@ -261,37 +308,36 @@ void relatorio_inativas(Conta *inicio)
 
     if (encontrou == 0)
     {
-        gotoxy_rel(5, 7);
+        gotoxy(5, 7);
         printf("Nenhuma conta inativa encontrada.");
     }
 }
+
+
+
 void relatorio_limites(Conta *inicio)
 {
     Conta *aux = inicio;
     int linha = 7;
 
-    desenhar_tela_rel();
-    cabecalho_rel("LIMITES DE CREDITO");
+    desenhar_tela();
+    cabecalho("LIMITES DE CREDITO");
 
-    gotoxy_rel(5, 5);
-    printf("CODIGO    BANCO                 SALDO          LIMITE");
+    gotoxy(5, 5);
+    printf("CODIGO====BANCO=================SALDO==========LIMITE");
 
     if (inicio == NULL)
     {
-        gotoxy_rel(5, 7);
+        gotoxy(5, 7);
         printf("Nenhuma conta cadastrada.");
         return;
     }
 
     while (aux != NULL)
     {
-        gotoxy_rel(5, linha);
+        gotoxy(5, linha);
 
-        printf("%-10d %-21.21s R$ %-12.2f R$ %.2f",
-               aux->codigo_conta,
-               aux->banco,
-               aux->vl_saldo,
-               aux->vl_limite);
+        printf("%-10d %-21.21s R$ %-12.2f R$ %.2f",aux->codigo_conta,aux->banco,aux->vl_saldo,aux->vl_limite);
 
         aux = aux->prox;
         linha++;

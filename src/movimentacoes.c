@@ -273,7 +273,7 @@ void consultar_movimentacoes(Conta *contas, Movimentacao *movimentos) {
 
     int codigo;
     int encontrou = 0;
-    int linha = 13;
+    int linha = 15;
 
     system("cls");
     cabecalho("HISTORICO DE MOVIMENTACOES");
@@ -305,20 +305,42 @@ void consultar_movimentacoes(Conta *contas, Movimentacao *movimentos) {
 
     while (movimentos != NULL) {
 
-        if (movimentos->codigo_conta == codigo) {
+    if (movimentos->codigo_conta == codigo) {
 
-            encontrou = 1;
+        if (linha > 25) {
 
-            gotoxy(5, linha);
-            printf("%-5d %-11s %-10s R$ %-10.2f R$ %.2f", movimentos->sequencial, movimentos->dt_movimento, movimentos->tp_movimentacao, movimentos->vl_movimento, movimentos->vl_saldo);
+            gotoxy(5, 27);
+            printf("Pressione uma tecla para continuar...");
+            getch();
 
-            linha++;
+            system("cls");
+            cabecalho("HISTORICO DE MOVIMENTACOES");
 
+            gotoxy(5, 11);
+            printf("Conta: %d | Banco: %s", contas->codigo_conta, contas->banco);
+
+            gotoxy(5, 13);
+            printf("SEQ.  DATA        TIPO       VALOR          SALDO");
+
+            gotoxy(5, 14);
+            printf("----------------------------------------------------------");
+
+            linha = 15;
+            
         }
 
-        movimentos = movimentos->prox;
+        encontrou = 1;
+
+        gotoxy(5, linha);
+        printf("%-5d %-11s %-10s R$ %-10.2f R$ %.2f",movimentos->sequencial,movimentos->dt_movimento,movimentos->tp_movimentacao,movimentos->vl_movimento,movimentos->vl_saldo);
+
+        linha++;
 
     }
+
+    movimentos = movimentos->prox;
+
+}
 
     if (!encontrou) {
 
